@@ -94,7 +94,7 @@ class MentalController extends Controller
         $page_num = $request->page_num;
         $per_page = 4;
         $offset = ($page_num - 1) * $per_page;
-        $listall = DB::table('mental_video')->skip($offset)->take($per_page)->get();
+        $listall = DB::table('videos')->skip($offset)->take($per_page)->get();
 
         //rename video source url
         $cnt = 0;
@@ -110,12 +110,14 @@ class MentalController extends Controller
      */
     public function question(Request $request)
     {
-        $quez_id = $request->id;
-        $quez_data = DB::table('mental_video')
-                        ->leftjoin('mental_question', 'mental_video.id', '=', 'mental_question.video_id')
-                        ->leftjoin('mental_answer', 'mental_question.id', '=', 'mental_answer.quez_id')
-                        ->select('quez_id', 'quez', 'answer')
-                        ->where('quez_id', $quez_id)
+        $video_id = $request->video_id;
+        $quez_id = $request->question_id;
+        $quez_data = DB::table('videos')
+                        ->leftjoin('video_questions', 'videos.id', '=', 'video_questions.video_id')
+                        ->leftjoin('answers', 'video_questions.id', '=', 'answers.questionnaire_id')
+                        ->select('question_id', 'answer')
+                        ->where('video_id', $video_id)
+                        ->where('question_id', $quez_id)
                         ->get();
         return response()->json($quez_data);
     }
