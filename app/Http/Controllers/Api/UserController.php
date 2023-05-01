@@ -141,4 +141,11 @@ class UserController extends Controller
             'data' => "",
         ]);
     }
+
+    public function info(Request $request)
+    {
+        $user_info = User::where('email', $request->email)->get();
+
+        return response()->json($user_info);
+    }
 }

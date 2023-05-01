@@ -18,7 +18,9 @@ use App\Http\Controllers\PostsController;
 |
 */
 Route::post('login', [UserController::class, 'login']);
+Route::post('logout', [UserController::class, 'logout']);
 Route::post('register', [UserController::class, 'register']);
+Route::post('/user/info', [UserController::class, 'info']);
 
 Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('user-details', [UserController::class, 'userDetails']);
