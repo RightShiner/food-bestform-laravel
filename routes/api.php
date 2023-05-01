@@ -34,3 +34,4 @@ Route::post('/physical/question', [PhysicalController::class, 'question']);
 Route::post('/posts/search', [PostsController::class, 'search']);
 Route::post('/posts/order', [PostsController::class, 'order']);
 Route::post('/posts/config', [PostsController::class, 'config']);
+Route::post('/posts/schedule', [PostsController::class, 'schedule']);

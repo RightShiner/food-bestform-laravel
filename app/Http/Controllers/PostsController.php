@@ -47,16 +47,19 @@ class PostsController extends Controller
                             ->where('name', $food_data['name'])
                             ->get();
             $food_price = (int)json_decode($food_price)[0]->price;
-
+            //calculate total_price
             $order_sum += $food_price * $food_data['crowd'];
         }
-        return response()->json($order_sum);
+        //respond success
+        return response()->json([
+            'status' => 1,
+            // 'total_price' => $order_sum,
+        ]);
     }
 
     /**
      * food config info (ingredient and grams)
      */
-
     public function config(Request $request)
     {
         $food_names = $request->name;
@@ -73,6 +76,19 @@ class PostsController extends Controller
         }
 
         return response()->json($food_config);
+    }
+
+    /**
+     * Schedule date and time
+     */
+    public function schedule(Request $request)
+    {
+        $time_arr = $request->all();
+
+        //respond success
+        return response()->json([
+            'status' => 1
+        ]);
     }
 
 }
