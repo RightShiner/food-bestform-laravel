@@ -15,13 +15,13 @@ class PostsController extends Controller
 
         $search = $request->input('search');
 
-        $posts = DB::table('food_list')
+        $posts = DB::table('foods')
             ->where('name', 'LIKE', "%{$search}%")
             ->get();
 
         $cnt = 0;
         foreach ($posts as $post) {
-            $posts[$cnt]->food_thumb = asset('uploads/food_thumb/'.$post->food_thumb);
+            $posts[$cnt]->image = asset('uploads/food_thumb/'.$post->image);
             $cnt++;
         }
 
@@ -42,11 +42,11 @@ class PostsController extends Controller
         $order_sum = 0;
         foreach ($order_data as $food_data)
         {
-            $food_price = DB::table('food_list')
-                            ->select('price')
+            $food_price = DB::table('foods')
+                            ->select('unit')
                             ->where('name', $food_data['name'])
                             ->get();
-            $food_price = (int)json_decode($food_price)[0]->price;
+            $food_price = (int)json_decode($food_price)[0]->unit;
             //calculate total_price
             $order_sum += $food_price * $food_data['crowd'];
         }
@@ -66,8 +66,8 @@ class PostsController extends Controller
         $food_config = [];
 
         foreach ($food_names as $food_name) {
-            $food_items = DB::table('food_list')
-                ->leftJoin('food_config', 'food_list.id', '=', 'food_config.food_id')
+            $food_items = DB::table('foods')
+                ->leftJoin('food_config', 'foods.id', '=', 'food_config.food_id')
                 ->select('ingredient', 'grams')
                 ->where('name', $food_name)
                 ->get();
