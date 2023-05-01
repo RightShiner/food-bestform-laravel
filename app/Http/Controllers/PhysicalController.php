@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PhysicalController extends Controller
 {
+    
     /**
      * Get video data
      */
@@ -17,7 +18,7 @@ class PhysicalController extends Controller
         $page_num = $request->page_num;
         $per_page = 4;
         $offset = ($page_num - 1) * $per_page;
-        $listall = DB::table('physical_video')->skip($offset)->take($per_page)->get();
+        $listall = DB::table('videos')->skip($offset)->take($per_page)->get();
 
         //rename video source url
         $cnt = 0;
@@ -33,12 +34,14 @@ class PhysicalController extends Controller
      */
     public function question(Request $request)
     {
-        $quez_id = $request->id;
-        $quez_data = DB::table('physical_video')
-                        ->leftjoin('physical_question', 'physical_video.id', '=', 'physical_question.video_id')
-                        ->leftjoin('physical_answer', 'physical_question.id', '=', 'physical_answer.quez_id')
-                        ->select('quez_id', 'quez', 'answer')
-                        ->where('quez_id', $quez_id)
+        $video_id = $request->video_id;
+        $quez_id = $request->question_id;
+        $quez_data = DB::table('videos')
+                        ->leftjoin('video_questions', 'videos.id', '=', 'video_questions.video_id')
+                        ->leftjoin('answers', 'video_questions.id', '=', 'answers.questionnaire_id')
+                        ->select('question_id', 'answer')
+                        ->where('video_id', $video_id)
+                        ->where('question_id', $quez_id)
                         ->get();
         return response()->json($quez_data);
     }
